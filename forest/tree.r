@@ -16,7 +16,6 @@ build_decision_tree <- function(X, y, max_depth = Inf, min_samples_split = 2, mi
     } else {
       best_split <- find_best_split_regression(data, features, target, min_samples_leaf)
     }
-    print(best_split)
     if (is.null(best_split)) {
       leaf<- calc_leaf(data,target,type)
       return(leaf)

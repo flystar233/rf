@@ -72,8 +72,14 @@ random_forest <- function(X,
     if (all(is.na(row))) {
       return(NA)  # 如果该样本从未作为OOB样本，返回NA
     }
-    pred <- names(which.max(table(row[!is.na(row)])))
-    return(pred != y[i, 1])
+
+    if (type == "classification") {
+      pred <- names(which.max(table(row[!is.na(row)])))
+      return(pred != y[i, 1])
+    } else {
+      pred <- mean(row[!is.na(row)])
+      return((pred- y[i, 1])^2)
+    }
   }), na.rm = TRUE)
   
   # 关闭并行计算
@@ -94,19 +100,23 @@ random_forest <- function(X,
 
 # 随机森林预测函数
 predict_random_forest <- function(forest, new_data) {
-  # 对每个样本进行预测
-  forest <- forest$forest
-  predictions <- sapply(1:nrow(new_data), function(i) {
-    sample_predictions <- sapply(forest, function(tree_info) {
+  forest_list <- forest$forest
+  predictions <- vector("character", nrow(new_data))
+  for (i in 1:nrow(new_data)) {
+    sample_predictions <- vector("numeric", length(forest_list))
+    for (j in 1:length(forest_list)) {
+      tree_info <- forest_list[[j]]
       tree <- tree_info$tree
       feature_indices <- tree_info$feature_indices
       new_data_subset <- new_data[i, feature_indices, drop = FALSE]
-      predict_tree(tree, new_data_subset)
-    })
-    # 对每个样本进行多数投票
-    names(which.max(table(sample_predictions)))
-  })
-  
+      sample_predictions[j] <- predict_tree(tree, new_data_subset)
+    }
+    if (forest$type == "classification") {
+      predictions[i] <- names(which.max(table(sample_predictions)))
+    } else {
+      predictions[i] <- mean(sample_predictions)
+    }
+  }
   return(predictions)
 }
 
@@ -126,5 +136,5 @@ calculate_accuracy <- function(forest, X_test, y_test) {
 #forest <- random_forest(data[1:4],data[,5], n_trees = 100, max_depth = 5, min_samples_split = 2, min_samples_leaf = 1,replace = TRUE,seed = 42)
 
 # test wine
-data = read.csv("wine.txt",header = T)
-forest <- random_forest(data[1:9],data[,10],n_trees = 1, max_depth = 10, min_samples_split = 2, min_samples_leaf = 1,replace = TRUE,seed = 42,type = "regression")
+#data = read.csv("wine.txt",header = T)
+#forest <- random_forest(data[1:9],data[,10],n_trees = 1, max_depth = 10, min_samples_split = 2, min_samples_leaf = 10,replace = TRUE,seed = 42,type = "regression")
