@@ -53,16 +53,16 @@ find_best_split_classification <- function(data, features, target, min_samples_l
 }
 
 find_best_split_regression <- function(data, features, target, min_samples_leaf) {
-  best_variance_sum <- Inf
+  best_mse <- Inf
   best_split <- NULL
   
   for (feature in features) {
     if (is.numeric(data[[feature]])) {
       split_points <- if (length(unique(data[[feature]])) <= 100) {
         sort(unique(data[[feature]]))
-        } else {
+      } else {
         quantile(data[[feature]], probs = seq(0, 1, length.out = 100))
-        }
+      }
       
       for (split in split_points) {
         left <- data[[target]][data[[feature]] <= split]
@@ -73,16 +73,20 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
           next
         }
         
-        # 计算左右子节点的方差和
-        variance_sum <- safe_var(left)+ safe_var(right)
+        # 计算左右子节点的均方误差和
+        left_mse <- if (length(left) > 0) mean((left - mean(left))^2) else 0
+        right_mse <- if (length(right) > 0) mean((right - mean(right))^2)
+        mse_sum <- left_mse * length(left) + right_mse * length(right)
+        total_length <- length(left) + length(right)
+        mse = mse_sum / total_length
         
-        if (variance_sum < best_variance_sum) {
-          best_variance_sum <- variance_sum
-          best_split <- list(feature = feature, value = split, gini = variance_sum)
+        if (mse < best_mse) {
+          best_mse <- mse
+          best_split <- list(feature = feature, value = split, gini = mse)
         }
       }
     } else {
-        stop("分类变量不支持回归树")
+      stop("分类变量不支持回归树")
     }
   }
   return(best_split)
@@ -119,10 +123,6 @@ tree_info <- function(object, tree_number = 1) {
   print_tree(tree)
 }
 
-safe_var <- function(x) {
-  if (length(unique(x)) <= 1) return(0)
-  var(x)
-}
 calc_leaf <- function(data,target,type) {
   if (type == "classification") {
     class_counts <- table(data[[target]])

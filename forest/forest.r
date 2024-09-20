@@ -101,7 +101,10 @@ random_forest <- function(X,
 # 随机森林预测函数
 predict_random_forest <- function(forest, new_data) {
   forest_list <- forest$forest
-  predictions <- vector("character", nrow(new_data))
+  predictions <- if (forest$type == "classification") 
+                  {vector("character", nrow(new_data))
+                  } else 
+                  {vector("numeric", nrow(new_data))}
   for (i in 1:nrow(new_data)) {
     sample_predictions <- vector("numeric", length(forest_list))
     for (j in 1:length(forest_list)) {
@@ -114,7 +117,7 @@ predict_random_forest <- function(forest, new_data) {
     if (forest$type == "classification") {
       predictions[i] <- names(which.max(table(sample_predictions)))
     } else {
-      predictions[i] <- mean(sample_predictions)
+      predictions[i] <- round(mean(sample_predictions),5)
     }
   }
   return(predictions)
@@ -136,5 +139,5 @@ calculate_accuracy <- function(forest, X_test, y_test) {
 #forest <- random_forest(data[1:4],data[,5], n_trees = 100, max_depth = 5, min_samples_split = 2, min_samples_leaf = 1,replace = TRUE,seed = 42)
 
 # test wine
-#data = read.csv("wine.txt",header = T)
-#forest <- random_forest(data[1:9],data[,10],n_trees = 1, max_depth = 10, min_samples_split = 2, min_samples_leaf = 10,replace = TRUE,seed = 42,type = "regression")
+data = read.csv("housing.txt",header = T)
+forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 5, min_samples_split = 10, min_samples_leaf = 5,replace = TRUE,seed = 42,type = "regression")
