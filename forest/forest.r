@@ -140,4 +140,4 @@ calculate_accuracy <- function(forest, X_test, y_test) {
 
 # test wine
 data = read.csv("housing.txt",header = T)
-forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 5, min_samples_split = 10, min_samples_leaf = 5,replace = TRUE,seed = 42,type = "regression")
+forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 8, min_samples_split = 1, min_samples_leaf = 1,replace = F,seed = 42,type = "regreion")

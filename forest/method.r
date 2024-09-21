@@ -91,6 +91,13 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
   }
   return(best_split)
 }
+find_best_split_extratrees <- function(data, features, target) {
+  feature <- sample(features, 1)
+  value <- sample(data[,feature],1)
+  gini <- NA
+  best_split <- list(feature = feature, value = value, gini = gini)
+  return(best_split)
+}
 # 辅助函数：计算基尼不纯度
 calculate_gini <- function(y) {
   if (length(y) == 0) return(0)
@@ -111,7 +118,7 @@ tree_info <- function(object, tree_number = 1) {
     if(object$type == "classification") {
     cat(sprintf("%s|-- Node: feature = %s, split value = %.2f, gini = %.4f, samples = %d\n", 
                 indent, tree$feature, tree$value, tree$gini, tree$samples))
-        }else if(object$type == "regression") {
+        }else {
     cat(sprintf("%s|-- Node: feature = %s, split value = %.2f, variance = %.4f, samples = %d\n", 
                 indent, tree$feature, tree$value, tree$gini, tree$samples))
         }
@@ -132,7 +139,7 @@ calc_leaf <- function(data,target,type) {
     prob = as.numeric(class_counts) / sum(class_counts),
     samples = nrow(data)
     ))
-  } else if (type == "regression") {
+  } else {
     return(list(
     type = "leaf",
     class = mean(data[[target]]),
@@ -140,7 +147,5 @@ calc_leaf <- function(data,target,type) {
     samples = nrow(data)
     ))
     
-  } else {
-    stop("Unknown tree type")
   }
 }

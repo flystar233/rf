@@ -12,8 +12,10 @@ build_decision_tree <- function(X, y, max_depth = Inf, min_samples_split = 2, mi
     
     if (type == "classification") {
       best_split <- find_best_split_classification(data, features, target, min_samples_leaf)
-    } else {
+    } else if (type == "regression"){
       best_split <- find_best_split_regression(data, features, target, min_samples_leaf)
+    }else {
+      best_split <- find_best_split_extratrees(data, features, target)
     }
     if (is.null(best_split)) {
       leaf<- calc_leaf(data,target,type)
