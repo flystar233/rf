@@ -14,9 +14,10 @@ random_forest <- function(X,
                           subsample = ifelse(replace, 1, 0.632),
                           replace = TRUE,
                           seed = NULL,
-                          type = "classification",
-                          n_cores = parallel::detectCores() - 1) {
+                          type = c("classification", "regression","extratrees"),
+                          n_cores = availableCores() - 1) {
   
+  type <- match.arg(type)
   n_features <- ncol(X)
   n_samples <- nrow(X)
   if (!is.null(seed)) {
@@ -99,27 +100,32 @@ random_forest <- function(X,
 }
 
 # 随机森林预测函数
-predict_random_forest <- function(forest, new_data) {
+predict_random_forest <- function(forest, new_data, n_cores = availableCores() - 1) {
   forest_list <- forest$forest
-  predictions <- if (forest$type == "classification") 
-                  {vector("character", nrow(new_data))
-                  } else 
-                  {vector("numeric", nrow(new_data))}
-  for (i in 1:nrow(new_data)) {
+  
+  # Set up parallel processing
+  plan(multisession, workers = n_cores)
+  
+  # Define a function to predict for a single row
+  predict_row <- function(row) {
     sample_predictions <- vector("numeric", length(forest_list))
     for (j in 1:length(forest_list)) {
       tree_info <- forest_list[[j]]
       tree <- tree_info$tree
       feature_indices <- tree_info$feature_indices
-      new_data_subset <- new_data[i, feature_indices, drop = FALSE]
+      new_data_subset <- row[feature_indices]
       sample_predictions[j] <- predict_tree(tree, new_data_subset)
     }
+    
     if (forest$type == "classification") {
-      predictions[i] <- names(which.max(table(sample_predictions)))
+      return(names(which.max(table(sample_predictions))))
     } else {
-      predictions[i] <- round(mean(sample_predictions),5)
+      return(round(mean(sample_predictions), 5))
     }
   }
+  # Use future_lapply to parallelize predictions
+  predictions <- future_lapply(1:nrow(new_data), function(i) predict_row(new_data[i,]))
+  predictions <- unlist(predictions, use.names = FALSE)
   return(predictions)
 }
 
@@ -140,4 +146,4 @@ calculate_accuracy <- function(forest, X_test, y_test) {
 
 # test wine
 data = read.csv("housing.txt",header = T)
-forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 8, min_samples_split = 1, min_samples_leaf = 1,replace = F,seed = 42,type = "regreion")
+forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 5, min_samples_split = 10, min_samples_leaf = 5,replace = T,seed = 42,type = "regression")
