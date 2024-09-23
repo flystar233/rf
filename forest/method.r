@@ -129,6 +129,15 @@ tree_info <- function(object, tree_number = 1) {
   }
   print_tree(tree)
 }
+calculate_r_squared <- function(y_true, y_pred) {
+  not_na <- !is.na(y_pred)
+  y_true <- y_true[not_na,]
+  y_pred <- y_pred[not_na]
+  rss <- sum((y_pred - y_true) ^ 2)
+  tss <- sum((y_true - mean(y_true)) ^ 2)
+  r_squared <- 1 - rss / tss
+  return(r_squared)
+}
 
 calc_leaf <- function(data,target,type) {
   if (type == "classification") {

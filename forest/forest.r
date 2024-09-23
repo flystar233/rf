@@ -101,11 +101,9 @@ random_forest <- function(X,
 
 # 随机森林预测函数
 predict_random_forest <- function(forest, new_data, n_cores = availableCores() - 1) {
-  forest_list <- forest$forest
-  
+  forest_list <- forest$forest  
   # Set up parallel processing
   plan(multisession, workers = n_cores)
-  
   # Define a function to predict for a single row
   predict_row <- function(row) {
     sample_predictions <- vector("numeric", length(forest_list))
@@ -136,7 +134,11 @@ calculate_accuracy <- function(forest, X_test, y_test) {
     colnames(y_test) <- "target"
   }
   predictions <- predict_random_forest(forest, X_test)
-  accuracy <- sum(predictions == y_test) / nrow(y_test)
+  if (forest$type == "classification") {
+    accuracy <- sum(predictions == y_test$target) / nrow(y_test)
+  } else {
+    accuracy <- calculate_r_squared(y_test,predictions)
+  }
   return(accuracy)
 }
 
