@@ -139,6 +139,31 @@ calculate_r_squared <- function(y_true, y_pred) {
   return(r_squared)
 }
 
+traverse_tree <- function(node, nodeID = 0) {
+  # 如果是叶子节点
+  if (node$type == "leaf") {
+    return(data.frame(nodeID = nodeID,
+                      leftChild = NA,
+                      rightChild = NA,
+                      splitvarName = NA,
+                      splitval = NA,
+                      terminal = TRUE,
+                      prediction = node$class))
+  } else { # 如果是内部节点
+    counter <- 1
+    new_row <- data.frame(nodeID = nodeID,
+                          leftChild = nodeID * 2 + counter,
+                          rightChild = nodeID * 2 + counter + 1,
+                          splitvarName = node$feature,
+                          splitval = node$value,
+                          terminal = FALSE,
+                          prediction = NA)
+    left_df <- traverse_tree(node$left, nodeID * 2 + counter)
+    right_df <- traverse_tree(node$right, nodeID * 2 + counter + 1)
+    combined_df <- rbind(new_row, left_df, right_df)
+    return(combined_df[order(combined_df$nodeID), ])
+  }
+}
 calc_leaf <- function(data,target,type) {
   if (type == "classification") {
     class_counts <- table(data[[target]])
