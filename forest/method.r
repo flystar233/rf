@@ -104,31 +104,6 @@ calculate_gini <- function(y) {
   p <- table(y) / length(y)
   return(1 - sum(p^2))
 }
-# 打印决策树结构
-tree_info <- function(object, tree_number = 1) {
-  if (tree_number > object$n_trees){
-    stop(paste("Error: Requesting tree",tree_number, ",but the tree number in this forest is", object$n_trees))
-  }
-  tree <- object$forest[[tree_number]]$tree
-  print_tree <- function(tree, indent = "") {
-  if (tree$type == "leaf") {
-    cat(sprintf("%s|-- Leaf: class = %s, probability = %.2f, samples = %d\n", 
-                indent, tree$class, tree$prob, tree$samples))
-  } else {
-    if(object$type == "classification") {
-    cat(sprintf("%s|-- Node: feature = %s, split value = %.2f, gini = %.4f, samples = %d\n", 
-                indent, tree$feature, tree$value, tree$gini, tree$samples))
-        }else {
-    cat(sprintf("%s|-- Node: feature = %s, split value = %.2f, variance = %.4f, samples = %d\n", 
-                indent, tree$feature, tree$value, tree$gini, tree$samples))
-        }
-                
-    print_tree(tree$left, paste0(indent, "|   "))
-    print_tree(tree$right, paste0(indent, "|   "))
-    }
-  }
-  print_tree(tree)
-}
 calculate_r_squared <- function(y_true, y_pred) {
   not_na <- !is.na(y_pred)
   y_true <- y_true[not_na,]
@@ -139,7 +114,7 @@ calculate_r_squared <- function(y_true, y_pred) {
   return(r_squared)
 }
 
-traverse_tree <- function(node, nodeID = 0) {
+tree_info <- function(node, nodeID = 0) {
   # 如果是叶子节点
   if (node$type == "leaf") {
     return(data.frame(nodeID = nodeID,
@@ -161,7 +136,16 @@ traverse_tree <- function(node, nodeID = 0) {
     left_df <- traverse_tree(node$left, nodeID * 2 + counter)
     right_df <- traverse_tree(node$right, nodeID * 2 + counter + 1)
     combined_df <- rbind(new_row, left_df, right_df)
-    return(combined_df[order(combined_df$nodeID), ])
+    combined_df <- combined_df[order(combined_df$nodeID), ]
+    #处理ID无法按顺序排列的问题
+    n <- sum(!is.na(combined_df$leftChild) & !is.na(combined_df$rightChild))
+    new_values <- seq(from = 1, by = 1, length.out = n * 2)
+    combined_df$leftChild[!is.na(combined_df$leftChild)] <- new_values[seq(1, n * 2, 2)]
+    combined_df$rightChild[!is.na(combined_df$rightChild)] <- new_values[seq(2, n * 2, 2)]
+    combined_df$nodeID <- seq(0, nrow(combined_df) - 1)
+    rownames(combined_df) <- NULL
+
+    return(combined_df)
   }
 }
 calc_leaf <- function(data,target,type) {
