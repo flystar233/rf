@@ -133,8 +133,8 @@ tree_info <- function(node, nodeID = 0) {
                           splitval = node$value,
                           terminal = FALSE,
                           prediction = NA)
-    left_df <- traverse_tree(node$left, nodeID * 2 + counter)
-    right_df <- traverse_tree(node$right, nodeID * 2 + counter + 1)
+    left_df <- tree_info(node$left, nodeID * 2 + counter)
+    right_df <- tree_info(node$right, nodeID * 2 + counter + 1)
     combined_df <- rbind(new_row, left_df, right_df)
     combined_df <- combined_df[order(combined_df$nodeID), ]
     #处理ID无法按顺序排列的问题
