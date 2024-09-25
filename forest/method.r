@@ -87,8 +87,28 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
         }
       }
     } else {
-      stop("分类变量不支持回归树")
-    }
+      levels <- unique(data[[feature]])
+      for (level in levels) {
+        left <- data[[target]][data[[feature]] == level]
+        right <- data[[target]][data[[feature]] != level]
+
+        # 检查分割后的子节点是否满足最小样本数要求
+        if (length(left) < min_samples_leaf || length(right) < min_samples_leaf) {
+          next
+        }
+        # 计算左右子节点的均方误差和
+        left_mse <- if (length(left) > 0) mean((left - mean(left))^2) else 0
+        right_mse <- if (length(right) > 0) mean((right - mean(right))^2)
+        mse_sum <- left_mse * length(left) + right_mse * length(right)
+        total_length <- length(left) + length(right)
+        mse = mse_sum / total_length
+
+        if (mse < best_mse) {
+          best_mse <- mse
+          best_split <- list(feature = feature, value = level, gini = mse)
+        }
+      }
+  }
   }
   return(best_split)
 }

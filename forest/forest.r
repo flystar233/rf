@@ -143,9 +143,9 @@ calculate_accuracy <- function(forest, X_test, y_test) {
 }
 
 #test iris
-#data = iris|>select(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width,Species)|>filter(Species!="setosa")
+#data = iris|>select(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width,Species)
 #forest <- random_forest(data[1:4],data[,5], n_trees = 100, max_depth = 5, min_samples_split = 2, min_samples_leaf = 1,replace = TRUE,seed = 42)
 
 # test wine
 data = read.csv("housing.txt",header = T)
-forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 3, min_samples_split = 10, min_samples_leaf = 5,replace = T,seed = 42,type = "regression")
+forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 5, min_samples_split = 10, min_samples_leaf = 5,replace = T,type = "regression")
