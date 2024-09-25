@@ -1,3 +1,4 @@
+library(data.tree)
 # 辅助函数：寻找最佳分割点
 find_best_split_classification <- function(data, features, target, min_samples_leaf) {
   best_gini <- Inf
@@ -142,9 +143,8 @@ tree_info <- function(node, nodeID = 0) {
     new_values <- seq(from = 1, by = 1, length.out = n * 2)
     combined_df$leftChild[!is.na(combined_df$leftChild)] <- new_values[seq(1, n * 2, 2)]
     combined_df$rightChild[!is.na(combined_df$rightChild)] <- new_values[seq(2, n * 2, 2)]
-    combined_df$nodeID <- seq(0, nrow(combined_df) - 1)
+    #combined_df$nodeID <- seq(0, nrow(combined_df) - 1)
     rownames(combined_df) <- NULL
-
     return(combined_df)
   }
 }
@@ -166,4 +166,61 @@ calc_leaf <- function(data,target,type) {
     ))
     
   }
+}
+
+collapse <- function(x){
+    x<-sub(" ","_",x)
+    
+    return(x)
+}
+
+build_tree <- function(df) {
+    df$row <- as.numeric(rownames(df))
+    colnames(df)<-sapply(colnames(df),collapse)
+    # 初始化一个空的列表来存储节点
+    nodes <- vector("list", nrow(df))
+    
+    # 遍历数据框的每一行
+    for (i in 1:nrow(df)) {
+        # 创建一个新的节点
+        if (df$status[i] == -1) {
+            nodes[[i]] <- Node$new(name = as.character(df$prediction[i]))
+        } else {
+            nodes[[i]] <- Node$new(name = paste(df$split_var[i], "<=",df$split_point[i]))
+        }
+    }
+    
+    # 再次遍历数据框的每一行，将子节点添加到父节点
+    for (i in 1:nrow(df)) {
+        if (df$left_daughter[i] != 0) {
+            nodes[[i]]$AddChildNode(nodes[[df$left_daughter[i]]])
+        }
+        if (df$right_daughter[i] != 0) {
+            nodes[[i]]$AddChildNode(nodes[[df$right_daughter[i]]])
+        }
+    }
+    
+    # 返回根节点
+    return(nodes[[1]])
+}
+
+plot_tree <-function(tree,tree_from="ranger"){
+    if (tree_from=="ranger"){
+        tree_data<- data.frame("left_daughter" = tree$leftChild+1,
+                    "right_daughter" = tree$rightChild+1,
+                    "split_var" = tree$splitvarName,
+                    "split_point" = tree$splitval,
+                    "status"=ifelse(tree$terminal, -1, 1),
+                    "prediction"=tree$prediction)
+
+        tree_data$left_daughter[is.na(tree_data$left_daughter)] <- 0
+        tree_data$right_daughter[is.na(tree_data$right_daughter)] <- 0
+        tree_plot<- build_tree(tree_data)
+    }else if (tree_from =="randomForest"){
+        tree_plot<- build_tree(tree)
+    }
+    else{
+        stop("tree_from must be ranger or randomForest!")
+    }
+    return(tree_plot)
 }
