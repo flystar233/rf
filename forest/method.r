@@ -126,38 +126,42 @@ calculate_gini <- function(y) {
   return(1 - sum(p^2))
 }
 
-tree_info <- function(node, nodeID = 0) {
-  # 如果是叶子节点
-  if (node$type == "leaf") {
-    return(data.frame(nodeID = nodeID,
-                      leftChild = NA,
-                      rightChild = NA,
-                      splitvarName = NA,
-                      splitval = NA,
-                      terminal = TRUE,
-                      prediction = node$class))
-  } else { # 如果是内部节点
-    counter <- 1
-    new_row <- data.frame(nodeID = nodeID,
-                          leftChild = nodeID * 2 + counter,
-                          rightChild = nodeID * 2 + counter + 1,
-                          splitvarName = node$feature,
-                          splitval = node$value,
-                          terminal = FALSE,
-                          prediction = NA)
-    left_df <- tree_info(node$left, nodeID * 2 + counter)
-    right_df <- tree_info(node$right, nodeID * 2 + counter + 1)
-    combined_df <- rbind(new_row, left_df, right_df)
-    combined_df <- combined_df[order(combined_df$nodeID), ]
-    #处理ID无法按顺序排列的问题
-    n <- sum(!is.na(combined_df$leftChild) & !is.na(combined_df$rightChild))
-    new_values <- seq(from = 1, by = 1, length.out = n * 2)
-    combined_df$leftChild[!is.na(combined_df$leftChild)] <- new_values[seq(1, n * 2, 2)]
-    combined_df$rightChild[!is.na(combined_df$rightChild)] <- new_values[seq(2, n * 2, 2)]
-    #combined_df$nodeID <- seq(0, nrow(combined_df) - 1)
-    rownames(combined_df) <- NULL
-    return(combined_df)
+tree_info <- function(forest,tree_number =1){
+  get_tree_info <- function(node, nodeID = 0) {
+    if (node$type == "leaf") {
+      return(data.frame(nodeID = nodeID,
+                        leftChild = NA,
+                        rightChild = NA,
+                        splitvarName = NA,
+                        splitval = NA,
+                        terminal = TRUE,
+                        prediction = node$class))
+    } else {
+      counter <- 1
+      new_row <- data.frame(nodeID = nodeID,
+                            leftChild = nodeID * 2 + counter,
+                            rightChild = nodeID * 2 + counter + 1,
+                            splitvarName = node$feature,
+                            splitval = node$value,
+                            terminal = FALSE,
+                            prediction = NA)
+      left_df <- get_tree_info(node$left, nodeID * 2 + counter)
+      right_df <- get_tree_info(node$right, nodeID * 2 + counter + 1)
+      combined_df <- rbind(new_row, left_df, right_df)
+      combined_df <- combined_df[order(combined_df$nodeID), ]
+      #处理ID无法按顺序排列的问题
+      n <- sum(!is.na(combined_df$leftChild) & !is.na(combined_df$rightChild))
+      new_values <- seq(from = 1, by = 1, length.out = n * 2)
+      combined_df$leftChild[!is.na(combined_df$leftChild)] <- new_values[seq(1, n * 2, 2)]
+      combined_df$rightChild[!is.na(combined_df$rightChild)] <- new_values[seq(2, n * 2, 2)]
+      #combined_df$nodeID <- seq(0, nrow(combined_df) - 1)
+      rownames(combined_df) <- NULL
+      return(combined_df)
+    }
   }
+  node <- forest$forest[[tree_number]]$tree
+  df <- get_tree_info(node)
+  return(df)
 }
 calc_leaf <- function(data,target,type) {
   if (type == "classification") {

@@ -131,13 +131,12 @@ predict_random_forest <- function(forest, new_data, n_cores = availableCores() -
 calculate_accuracy <- function(forest, X_test, y_test) {
   if(!is.data.frame(y_test)){
     y_test <- as.data.frame(y_test)
-    colnames(y_test) <- "target"
   }
   predictions <- predict_random_forest(forest, X_test)
   if (forest$type == "classification") {
-    accuracy <- sum(predictions == y_test$target) / nrow(y_test)
+    accuracy <- sum(predictions == y_test[,1]) / nrow(y_test)
   } else {
-    accuracy <- cor(y_test, predictions)^2
+    accuracy <- cor(y_test[,1], predictions)^2
   }
   return(accuracy)
 }
