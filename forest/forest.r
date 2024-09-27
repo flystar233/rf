@@ -137,7 +137,7 @@ calculate_accuracy <- function(forest, X_test, y_test) {
   if (forest$type == "classification") {
     accuracy <- sum(predictions == y_test$target) / nrow(y_test)
   } else {
-    accuracy <- calculate_r_squared(y_test,predictions)
+    accuracy <- cor(y_test, predictions)^2
   }
   return(accuracy)
 }
@@ -147,5 +147,5 @@ calculate_accuracy <- function(forest, X_test, y_test) {
 #forest <- random_forest(data[1:4],data[,5], n_trees = 100, max_depth = 5, min_samples_split = 2, min_samples_leaf = 1,replace = TRUE,seed = 42)
 
 # test wine
-data = read.csv("housing.txt",header = T)
-forest <- random_forest(data[1:13],data[,14],n_trees = 100, max_depth = 5, min_samples_split = 10, min_samples_leaf = 5,replace = T,type = "regression")
+#data = read.csv("housing.txt",header = T)
+forest <- random_forest(data[1:400,1:13],data[1:400,14],n_trees = 100, max_depth = 5, min_samples_split = 50, min_samples_leaf = 10,replace = T,type = "regression")

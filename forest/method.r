@@ -125,15 +125,6 @@ calculate_gini <- function(y) {
   p <- table(y) / length(y)
   return(1 - sum(p^2))
 }
-calculate_r_squared <- function(y_true, y_pred) {
-  not_na <- !is.na(y_pred)
-  y_true <- y_true[not_na,]
-  y_pred <- y_pred[not_na]
-  rss <- sum((y_pred - y_true) ^ 2)
-  tss <- sum((y_true - mean(y_true)) ^ 2)
-  r_squared <- 1 - rss / tss
-  return(r_squared)
-}
 
 tree_info <- function(node, nodeID = 0) {
   # 如果是叶子节点
@@ -180,7 +171,7 @@ calc_leaf <- function(data,target,type) {
   } else {
     return(list(
     type = "leaf",
-    class = mean(data[[target]]),
+    class = round(mean(data[[target]]),5),
     prob = NA,
     samples = nrow(data)
     ))
