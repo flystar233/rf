@@ -4,8 +4,8 @@ library(future.apply)
 source('./tree.r')
 source('./method.r')
 # 随机森林函数
-random_forest <- function(X, 
-                          y,
+random_forest <- function(X = NULL,
+                          y = NULL,
                           n_trees = 100,
                           max_depth = NULL,
                           min_samples_split = 2,
@@ -15,8 +15,26 @@ random_forest <- function(X,
                           replace = TRUE,
                           seed = NULL,
                           type = c("classification", "regression","extratrees"),
-                          n_cores = availableCores() - 1) {
-  
+                          n_cores = availableCores() - 1,
+                          data = NULL,
+                          formula = NULL
+                          ) {
+  if (is.null(data) && is.null(formula)) {
+    X <- X
+    y <- y
+  } else if (!is.null(formula)) {
+    formula <- as.character.default(formula)
+    elevantVars <- lapply(
+        formula[2:3],
+        function(z) attr(
+            stats::terms.formula(stats::reformulate(z), data = data[1, ]), "term.labels"
+        )
+    )
+    X <- data[setdiff(elevantVars[[2]],elevantVars[[1]])]
+    y <- data[elevantVars[[1]]]
+  } else {
+    stop("Either data or formula must be specified.")
+  }
   type <- match.arg(type)
   n_features <- ncol(X)
   n_samples <- nrow(X)
@@ -146,5 +164,6 @@ calculate_accuracy <- function(forest, X_test, y_test) {
 #forest <- random_forest(data[1:4],data[,5], n_trees = 100, max_depth = 5, min_samples_split = 2, min_samples_leaf = 1,replace = TRUE,seed = 42)
 
 # test wine
-#data = read.csv("housing.txt",header = T)
-forest <- random_forest(data[1:400,1:13],data[1:400,14],n_trees = 100, max_depth = 5, min_samples_split = 50, min_samples_leaf = 10,replace = T,type = "regression")
+data = read.csv("housing.txt",header = T)
+#forest <- random_forest(data[1:400,1:13],data[1:400,14],n_trees = 100, max_depth = 5, min_samples_split = 50, min_samples_leaf = 10,replace = T,type = "regression")
+forest <- random_forest(data=data,formula = MEDV~.,n_trees = 100, max_depth = 5, min_samples_split = 50, min_samples_leaf = 10,replace = T,type = "regression")
