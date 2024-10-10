@@ -1,0 +1,35 @@
+Package: rf
+Type: Package
+Title: Implementation of the Random Forest Algorithm
+Version: 1.0.0
+Date: 2024-08-27
+Author: Tengfei Xu [aut, cre]
+Maintainer: Tengfei Xu <flystar233@gmail.com>
+Authors@R: 
+    person(given = "Tengfei",
+           family = "Xu",
+           role = c("aut", "cre"),
+           email = "flystar233@gmail.com")
+Description: Write a random forest algorithm from scratch in R to understand the specific process and details of the algorithm.
+LazyData: false
+License: MIT + file LICENSE
+Depends: 
+    R (>= 4.0.0)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Packaged: 2024-08-22 11:06:44 UTC;
+RoxygenNote: 7.3.2
+Imports: 
+    stats,
+    dplyr,
+    future,
+    future.apply,
+    data.tree
+URL: https://github.com/flystar233/isoForest
+BugReports: https://github.com/flystar233/isoForest/issues
+Suggests: 
+    renv,
+    knitr,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
