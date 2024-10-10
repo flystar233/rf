@@ -163,12 +163,14 @@ random_forest <- function(X = NULL,
 #' @title Predict using a trained random forest
 #' @param forest A random forest object.
 #' @param new_data A data frame containing the new data to be predicted.
+#' @param type The type of classification prediction to make. Default is "value".
 #' @param n_cores The number of cores to use for parallel processing.
 #' Default is the number of available cores minus one.
 #' @return A vector of predictions.
 #' @export
 predict_random_forest <- function(forest,
                                   new_data,
+                                  type = "value",
                                   n_cores = future::availableCores() - 1) {
   forest_list <- forest$forest
   # Set up parallel processing
@@ -185,14 +187,22 @@ predict_random_forest <- function(forest,
     }
 
     if (forest$type == "classification") {
-      return(names(which.max(table(sample_predictions))))
+      if (type == "value") {
+        return(names(which.max(table(sample_predictions))))
+      } else {
+        return(prop.table(table(sample_predictions)))
+      }
     } else {
       return(round(mean(sample_predictions), 5))
     }
   }
   # Use future_lapply to parallelize predictions
   predictions <- future.apply::future_lapply(1:nrow(new_data), function(i) predict_row(new_data[i, ]))
-  predictions <- unlist(predictions, use.names = FALSE)
+  if (type == "value") {
+    predictions <- unlist(predictions, use.names = FALSE)
+  } else {
+    predictions <- do.call(rbind, predictions)
+  }
   return(predictions)
 }
 
