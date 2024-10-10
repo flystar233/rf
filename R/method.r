@@ -1,5 +1,5 @@
-#' title "Find the best split for classification"
-#' description "Find the best split for classification"
+#' @title Find the best split for classification
+#' @description Find the best split for classification
 #' @param data A data frame
 #' @param features A vector of feature names
 #' @param target The target variable name
@@ -58,8 +58,8 @@ find_best_split_classification <- function(data, features, target, min_samples_l
 
   return(best_split)
 }
-#' title "Find the best split for regression"
-#' description "Find the best split for regression"
+#' @title Find the best split for regression
+#' @description Find the best split for regression
 #' @param data A data frame
 #' @param features A vector of feature names
 #' @param target The target variable name
@@ -124,8 +124,8 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
   }
   return(best_split)
 }
-#' title "Find the best split for extratrees"
-#' description "Find the best split for extratrees"
+#' @title Find the best split for extratrees
+#' @description Find the best split for extratrees
 #' @param data A data frame
 #' @param features A vector of feature names
 #' @param target The target variable name
@@ -138,8 +138,8 @@ find_best_split_extratrees <- function(data, features, target) {
   best_split <- list(feature = feature, value = value, gini = gini)
   return(best_split)
 }
-#' title "Calculate the Gini impurity of a vector"
-#' description "Calculate the Gini impurity of a vector"
+#' @title Calculate the Gini impurity of a vector
+#' @description Calculate the Gini impurity of a vector
 #' @param y A vector
 #' @return The Gini impurity of the vector
 #' @export
@@ -151,8 +151,8 @@ calculate_gini <- function(y) {
   return(1 - sum(p^2))
 }
 
-#' title "get the information of a tree"
-#' description "get the information of a tree"
+#' @title get the information of a tree
+#' @description get the information of a tree
 #' @param forest A list of trees
 #' @param tree_number The number of the tree to get information from
 #' @return A data frame containing the information of the tree
@@ -198,8 +198,8 @@ tree_info <- function(forest, tree_number = 1) {
   df <- get_tree_info(node)
   return(df)
 }
-#' title "Calculate the best split leaf value for a given data frame and target variable"
-#' description "Calculate the best split leaf value for a given data frame and target variable"
+#' @title Calculate the best split leaf value for a given data frame and target variable
+#' @description Calculate the best split leaf value for a given data frame and target variable
 #' @param data A data frame
 #' @param target The target variable
 #' @param type The type of the target variable, either "classification" or "regression"
@@ -224,8 +224,8 @@ calc_leaf <- function(data, target, type) {
   }
 }
 
-#' title "collapse"
-#' description "collapse"
+#' @title collapse
+#' @description collapse
 #' @param x a vactor
 #' @return x with spaces replaced by underscores
 collapse <- function(x) {
@@ -234,11 +234,10 @@ collapse <- function(x) {
   return(x)
 }
 
-#' title "build_tree"
-#' description "build_tree"
+#' @title build_tree
+#' @description build_tree
 #' @param df a dataframe
 #' @return A tree structure
-#' @export
 build_tree <- function(df) {
   df$row <- as.numeric(rownames(df))
   colnames(df) <- sapply(colnames(df), collapse)
@@ -269,8 +268,8 @@ build_tree <- function(df) {
   return(nodes[[1]])
 }
 
-#' title "plot_tree"
-#' description "plot_tree"
+#' @title plot_tree
+#' @description plot_tree
 #' @param tree the tree info dataframe
 #' @param tree_from the method of making tree
 #' @return A tree structure

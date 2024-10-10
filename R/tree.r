@@ -1,5 +1,5 @@
-#' title "Build Decision Tree"
-#' description "Build a decision tree for classification or regression"
+#' @title Build Decision Tree
+#' @description Build a decision tree for classification or regression
 #' @param X a data frame of features
 #' @param y a vector of target values
 #' @param max_depth the maximum depth of the tree
@@ -68,7 +68,7 @@ build_decision_tree <- function(X, y, max_depth = Inf, min_samples_split = 2, mi
   return(build_tree_recursive(data))
 }
 
-#' title "Predict using decision tree"
+#' @title Predict using decision tree
 #' @param tree  decision tree
 #' @param new_data  new data
 #' @export
@@ -92,7 +92,7 @@ predict_single <- function(tree, new_data) {
   }
 }
 
-#' title "Predict using decision tree"
+#' @title Predict using decision tree
 #' @param tree  decision tree
 #' @param new_data  new data
 #' @return the predict result

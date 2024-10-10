@@ -1,4 +1,4 @@
-#' title "Random Forest"
+#' @title Random Forest
 #' @description
 #' This function implements a random forest algorithm.
 #' @param X A data frame of predictor variables.
@@ -158,7 +158,7 @@ random_forest <- function(X = NULL,
   ))
 }
 
-#' title "Predict using a trained random forest"
+#' @title Predict using a trained random forest
 #' @param forest A random forest object.
 #' @param new_data A data frame containing the new data to be predicted.
 #' @param n_cores The number of cores to use for parallel processing. Default is the number of available cores minus one.
@@ -191,7 +191,7 @@ predict_random_forest <- function(forest, new_data, n_cores = availableCores() -
   return(predictions)
 }
 
-#' title "Calculate the accuracy of a random forest"
+#' @title Calculate the accuracy of a random forest
 #' @param forest A random forest object.
 #' @param X_test A data frame containing the test data.
 #' @param y_test A vector containing the true labels for the test data.
