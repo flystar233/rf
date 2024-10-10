@@ -46,7 +46,7 @@ random_forest <- function(X = NULL,
                           replace = TRUE,
                           seed = NULL,
                           type = c("classification", "regression", "extratrees"),
-                          n_cores = availableCores() - 1,
+                          n_cores = future::availableCores() - 1,
                           data = NULL,
                           formula = NULL) {
   if (is.null(data) && is.null(formula)) {
@@ -97,7 +97,7 @@ random_forest <- function(X = NULL,
   samples_per_tree <- floor(n_samples * subsample)
 
   # 设置并行计算
-  future::plan(multisession, workers = n_cores)
+  future::plan(future::multisession,workers = n_cores)
 
   # 使用future_lapply并行构建树，并设置future.seed
   forest_and_oob <- future.apply::future_lapply(1:n_trees, function(i) {
@@ -141,7 +141,7 @@ random_forest <- function(X = NULL,
   }), na.rm = TRUE)
 
   # 关闭并行计算
-  future::plan(sequential)
+  future::plan(future::sequential)
 
   return(list(
     forest = forest,
@@ -167,7 +167,7 @@ random_forest <- function(X = NULL,
 predict_random_forest <- function(forest, new_data, n_cores = availableCores() - 1) {
   forest_list <- forest$forest
   # Set up parallel processing
-  future::plan(multisession, workers = n_cores)
+  future::plan(future::multisession, workers = n_cores)
   # Define a function to predict for a single row
   predict_row <- function(row) {
     sample_predictions <- vector("numeric", length(forest_list))
