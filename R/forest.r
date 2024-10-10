@@ -169,7 +169,7 @@ random_forest <- function(X = NULL,
 #' @export
 predict_random_forest <- function(forest,
                                   new_data,
-                                  n_cores = availableCores() - 1) {
+                                  n_cores = future::availableCores() - 1) {
   forest_list <- forest$forest
   # Set up parallel processing
   future::plan(future::multisession, workers = n_cores)
