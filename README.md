@@ -42,16 +42,29 @@ print(acc)
 ### 回归
 ```r
 data = read.csv("housing.txt",header = T)
-forest <- random_forest(data[1:13],data[14],
+forest <- random_forest(data[1:400,1:13],data[401:506,14],
                         n_trees = 100, max_depth = 5, min_samples_split = 10,
                         min_samples_leaf = 5,replace = T,type = "regression")
 print(forest$oob_error)
 #MSE
-#25.20217
-acc = calculate_accuracy(forest,data[1:13],data[14])
+#24.87385
+acc = calculate_accuracy(forest,data[401:506,1:13],data[401:506,14])
 print(acc)
 #r2
-#0.8604324
+#0.6480692
+```
+use ranger
+```r
+data = read.csv("housing.txt",header = T)
+rf = ranger(x=data[1:400,1:13],y= data[1:400,14],num.trees = 100,max.depth=5,replace = TRUE,min.node.size = 5)
+print(rf$prediction.error)
+#MSE
+#15.49557
+p = predict(rf,data[401:506,1:13])
+accuracy <- cor(data[401:506,14], p$predictions)^2
+print(accuracy)
+#r2
+#0.6470578
 ```
 ## 决策树可视化
 ```r
