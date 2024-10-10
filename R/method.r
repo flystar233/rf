@@ -198,13 +198,13 @@ tree_info <- function(forest, tree_number = 1) {
   df <- get_tree_info(node)
   return(df)
 }
+
 #' @title Calculate the best split leaf value for a given data frame and target variable
 #' @description Calculate the best split leaf value for a given data frame and target variable
 #' @param data A data frame
 #' @param target The target variable
 #' @param type The type of the target variable, either "classification" or "regression"
 #' @return A list containing the best split leaf value and the corresponding Gini impurity
-#' @export
 calc_leaf <- function(data, target, type) {
   if (type == "classification") {
     class_counts <- table(data[[target]])

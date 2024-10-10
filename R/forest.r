@@ -143,7 +143,7 @@ random_forest <- function(X = NULL,
   # 关闭并行计算
   future::plan(future::sequential)
 
-  return(list(
+  return_result <- list(
     forest = forest,
     oob_error = oob_error,
     mtry = mtry,
@@ -155,23 +155,28 @@ random_forest <- function(X = NULL,
     replace = replace,
     type = type,
     seed = seed
-  ))
+  )
+  class(return_result) <- c("random_forest")
+  return(return_result)
 }
 
 #' @title Predict using a trained random forest
 #' @param forest A random forest object.
 #' @param new_data A data frame containing the new data to be predicted.
-#' @param n_cores The number of cores to use for parallel processing. Default is the number of available cores minus one.
+#' @param n_cores The number of cores to use for parallel processing.
+#' Default is the number of available cores minus one.
 #' @return A vector of predictions.
 #' @export
-predict_random_forest <- function(forest, new_data, n_cores = availableCores() - 1) {
+predict_random_forest <- function(forest,
+                                  new_data,
+                                  n_cores = availableCores() - 1) {
   forest_list <- forest$forest
   # Set up parallel processing
   future::plan(future::multisession, workers = n_cores)
   # Define a function to predict for a single row
   predict_row <- function(row) {
     sample_predictions <- vector("numeric", length(forest_list))
-    for (j in 1:length(forest_list)) {
+    for (j in seq_along(forest_list)) {
       tree_info <- forest_list[[j]]
       tree <- tree_info$tree
       feature_indices <- tree_info$feature_indices
