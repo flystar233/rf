@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{calculate_gini}
 \alias{calculate_gini}
-\title{title "Calculate the Gini impurity of a vector"
-description "Calculate the Gini impurity of a vector"}
+\title{Calculate the Gini impurity of a vector}
 \usage{
 calculate_gini(y)
 }
@@ -14,6 +13,5 @@ calculate_gini(y)
 The Gini impurity of the vector
 }
 \description{
-title "Calculate the Gini impurity of a vector"
-description "Calculate the Gini impurity of a vector"
+Calculate the Gini impurity of a vector
 }

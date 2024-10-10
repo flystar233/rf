@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{build_tree}
 \alias{build_tree}
-\title{title "build_tree"
-description "build_tree"}
+\title{build_tree}
 \usage{
 build_tree(df)
 }
@@ -14,6 +13,5 @@ build_tree(df)
 A tree structure
 }
 \description{
-title "build_tree"
-description "build_tree"
+build_tree
 }

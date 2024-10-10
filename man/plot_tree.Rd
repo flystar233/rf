@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{plot_tree}
 \alias{plot_tree}
-\title{title "plot_tree"
-description "plot_tree"}
+\title{plot_tree}
 \usage{
 plot_tree(tree, tree_from = "ranger")
 }
@@ -16,6 +15,5 @@ plot_tree(tree, tree_from = "ranger")
 A tree structure
 }
 \description{
-title "plot_tree"
-description "plot_tree"
+plot_tree
 }

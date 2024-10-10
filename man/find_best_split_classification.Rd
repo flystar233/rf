@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{find_best_split_classification}
 \alias{find_best_split_classification}
-\title{title "Find the best split for classification"
-description "Find the best split for classification"}
+\title{Find the best split for classification}
 \usage{
 find_best_split_classification(data, features, target, min_samples_leaf)
 }
@@ -20,6 +19,5 @@ find_best_split_classification(data, features, target, min_samples_leaf)
 A list containing the best split feature, value, and gini impurity
 }
 \description{
-title "Find the best split for classification"
-description "Find the best split for classification"
+Find the best split for classification
 }

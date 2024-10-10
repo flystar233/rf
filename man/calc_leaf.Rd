@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{calc_leaf}
 \alias{calc_leaf}
-\title{title "Calculate the best split leaf value for a given data frame and target variable"
-description "Calculate the best split leaf value for a given data frame and target variable"}
+\title{Calculate the best split leaf value for a given data frame and target variable}
 \usage{
 calc_leaf(data, target, type)
 }
@@ -18,6 +17,5 @@ calc_leaf(data, target, type)
 A list containing the best split leaf value and the corresponding Gini impurity
 }
 \description{
-title "Calculate the best split leaf value for a given data frame and target variable"
-description "Calculate the best split leaf value for a given data frame and target variable"
+Calculate the best split leaf value for a given data frame and target variable
 }

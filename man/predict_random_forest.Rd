@@ -2,7 +2,7 @@
 % Please edit documentation in R/forest.r
 \name{predict_random_forest}
 \alias{predict_random_forest}
-\title{title "Predict using a trained random forest"}
+\title{Predict using a trained random forest}
 \usage{
 predict_random_forest(forest, new_data, n_cores = availableCores() - 1)
 }
@@ -17,5 +17,5 @@ predict_random_forest(forest, new_data, n_cores = availableCores() - 1)
 A vector of predictions.
 }
 \description{
-title "Predict using a trained random forest"
+Predict using a trained random forest
 }

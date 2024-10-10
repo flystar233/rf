@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{find_best_split_regression}
 \alias{find_best_split_regression}
-\title{title "Find the best split for regression"
-description "Find the best split for regression"}
+\title{Find the best split for regression}
 \usage{
 find_best_split_regression(data, features, target, min_samples_leaf)
 }
@@ -20,6 +19,5 @@ find_best_split_regression(data, features, target, min_samples_leaf)
 A list containing the best split feature, value, and mean squared error
 }
 \description{
-title "Find the best split for regression"
-description "Find the best split for regression"
+Find the best split for regression
 }

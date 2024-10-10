@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree.r
 \name{predict_single}
 \alias{predict_single}
-\title{title "Predict using decision tree"}
+\title{Predict using decision tree}
 \usage{
 predict_single(tree, new_data)
 }
@@ -12,5 +12,5 @@ predict_single(tree, new_data)
 \item{new_data}{new data}
 }
 \description{
-title "Predict using decision tree"
+Predict using decision tree
 }

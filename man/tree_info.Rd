@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{tree_info}
 \alias{tree_info}
-\title{title "get the information of a tree"
-description "get the information of a tree"}
+\title{get the information of a tree}
 \usage{
 tree_info(forest, tree_number = 1)
 }
@@ -16,6 +15,5 @@ tree_info(forest, tree_number = 1)
 A data frame containing the information of the tree
 }
 \description{
-title "get the information of a tree"
-description "get the information of a tree"
+get the information of a tree
 }

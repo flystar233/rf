@@ -2,7 +2,7 @@
 % Please edit documentation in R/forest.r
 \name{random_forest}
 \alias{random_forest}
-\title{title "Random Forest"}
+\title{Random Forest}
 \usage{
 random_forest(
   X = NULL,
@@ -16,7 +16,7 @@ random_forest(
   replace = TRUE,
   seed = NULL,
   type = c("classification", "regression", "extratrees"),
-  n_cores = availableCores() - 1,
+  n_cores = future::availableCores() - 1,
   data = NULL,
   formula = NULL
 )

@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{collapse}
 \alias{collapse}
-\title{title "collapse"
-description "collapse"}
+\title{collapse}
 \usage{
 collapse(x)
 }
@@ -14,6 +13,5 @@ collapse(x)
 x with spaces replaced by underscores
 }
 \description{
-title "collapse"
-description "collapse"
+collapse
 }

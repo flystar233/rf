@@ -2,8 +2,7 @@
 % Please edit documentation in R/tree.r
 \name{build_decision_tree}
 \alias{build_decision_tree}
-\title{title "Build Decision Tree"
-description "Build a decision tree for classification or regression"}
+\title{Build Decision Tree}
 \usage{
 build_decision_tree(
   X,
@@ -31,8 +30,7 @@ build_decision_tree(
 a decision tree
 }
 \description{
-title "Build Decision Tree"
-description "Build a decision tree for classification or regression"
+Build a decision tree for classification or regression
 }
 \examples{
 # Build a classification tree

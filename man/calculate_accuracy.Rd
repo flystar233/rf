@@ -2,7 +2,7 @@
 % Please edit documentation in R/forest.r
 \name{calculate_accuracy}
 \alias{calculate_accuracy}
-\title{title "Calculate the accuracy of a random forest"}
+\title{Calculate the accuracy of a random forest}
 \usage{
 calculate_accuracy(forest, X_test, y_test)
 }
@@ -17,5 +17,5 @@ calculate_accuracy(forest, X_test, y_test)
 The accuracy of the random forest.
 }
 \description{
-title "Calculate the accuracy of a random forest"
+Calculate the accuracy of a random forest
 }

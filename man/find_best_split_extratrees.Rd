@@ -2,8 +2,7 @@
 % Please edit documentation in R/method.r
 \name{find_best_split_extratrees}
 \alias{find_best_split_extratrees}
-\title{title "Find the best split for extratrees"
-description "Find the best split for extratrees"}
+\title{Find the best split for extratrees}
 \usage{
 find_best_split_extratrees(data, features, target)
 }
@@ -18,6 +17,5 @@ find_best_split_extratrees(data, features, target)
 A list containing the best split feature, value, and gini impurity
 }
 \description{
-title "Find the best split for extratrees"
-description "Find the best split for extratrees"
+Find the best split for extratrees
 }
