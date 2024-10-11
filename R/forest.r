@@ -25,12 +25,12 @@
 #' train_data <- iris[train_index, ]
 #' test_data <- iris[-train_index, ]
 #' # Train a random forest classifier
-#' rf_model <- random_forest(X = train_data[, -5], 
-#' y = train_data[, 5], n_trees = 100, max_depth = 5, 
-#' min_samples_split = 2, min_samples_leaf = 1, mtry = 2, 
+#' rf_model <- random_forest(X = train_data[, -5],
+#' y = train_data[, 5], n_trees = 100, max_depth = 5,
+#' min_samples_split = 2, min_samples_leaf = 1, mtry = 2,
 #' subsample = 0.632, replace = TRUE, seed = 123, type = "classification", n_cores = 1)
 #' # Make predictions on the test data
-#' predictions <- predict(rf_model, test_data[, -5])
+#' predictions <- predict_random_forest(rf_model, test_data[, -5])
 #' # Evaluate the accuracy of the model
 #' accuracy <- sum(predictions == test_data[, 5]) / nrow(test_data)
 #' print(accuracy)
@@ -75,6 +75,11 @@ random_forest <- function(X = NULL,
     ))
   }
   type <- match.arg(type)
+  if (type == "classification") {
+    class_level <- unique(y)
+  } else {
+    class_level <- NULL
+  }
   n_features <- ncol(X)
   n_samples <- nrow(X)
   if (!is.null(seed)) {
@@ -154,6 +159,7 @@ random_forest <- function(X = NULL,
     subsample = subsample,
     replace = replace,
     type = type,
+    class_level = class_level,
     seed = seed
   )
   class(return_result) <- c("random_forest")
@@ -189,8 +195,10 @@ predict_random_forest <- function(forest,
     if (forest$type == "classification") {
       if (type == "value") {
         return(names(which.max(table(sample_predictions))))
+      } else if (type == "prob"){
+        return(prop.table(table(factor(sample_predictions, levels = forest$class_level))))
       } else {
-        return(prop.table(table(sample_predictions)))
+        stop("The type parameter must be one of c('value', 'prob').")
       }
     } else {
       return(round(mean(sample_predictions), 5))
@@ -198,10 +206,10 @@ predict_random_forest <- function(forest,
   }
   # Use future_lapply to parallelize predictions
   predictions <- future.apply::future_lapply(1:nrow(new_data), function(i) predict_row(new_data[i, ]))
-  if (type == "value") {
-    predictions <- unlist(predictions, use.names = FALSE)
-  } else {
+  if (forest$type == "classification" & type == "prob") {
     predictions <- do.call(rbind, predictions)
+  } else {
+    predictions <- unlist(predictions, use.names = FALSE)
   }
   return(predictions)
 }

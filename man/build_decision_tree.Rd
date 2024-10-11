@@ -34,11 +34,6 @@ Build a decision tree for classification or regression
 }
 \examples{
 # Build a classification tree
-X <- data.frame(x1 = c(1, 2, 3, 4, 5), x2 = c(1, 2, 3, 4, 5))
-y <- c(1, 0, 1, 0, 1)
-tree <- build_decision_tree(X, y, type = "classification")
-# Build a regression tree
-X <- data.frame(x1 = c(1, 2, 3, 4, 5), x2 = c(1, 2, 3, 4, 5))
-y <- c(1, 2, 3, 4, 5)
-tree <- build_decision_tree(X, y, type = "regression")
+data <- iris
+tree <- build_decision_tree(data[,-5], data[5], type = "classification")
 }

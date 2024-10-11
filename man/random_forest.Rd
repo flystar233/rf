@@ -65,12 +65,12 @@ train_index <- sample(1:nrow(iris), 0.7*nrow(iris))
 train_data <- iris[train_index, ]
 test_data <- iris[-train_index, ]
 # Train a random forest classifier
-rf_model <- random_forest(X = train_data[, -5], 
-y = train_data[, 5], n_trees = 100, max_depth = 5, 
-min_samples_split = 2, min_samples_leaf = 1, mtry = 2, 
+rf_model <- random_forest(X = train_data[, -5],
+y = train_data[, 5], n_trees = 100, max_depth = 5,
+min_samples_split = 2, min_samples_leaf = 1, mtry = 2,
 subsample = 0.632, replace = TRUE, seed = 123, type = "classification", n_cores = 1)
 # Make predictions on the test data
-predictions <- predict(rf_model, test_data[, -5])
+predictions <- predict_random_forest(rf_model, test_data[, -5])
 # Evaluate the accuracy of the model
 accuracy <- sum(predictions == test_data[, 5]) / nrow(test_data)
 print(accuracy)

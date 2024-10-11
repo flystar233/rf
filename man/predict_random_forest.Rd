@@ -4,14 +4,22 @@
 \alias{predict_random_forest}
 \title{Predict using a trained random forest}
 \usage{
-predict_random_forest(forest, new_data, n_cores = availableCores() - 1)
+predict_random_forest(
+  forest,
+  new_data,
+  type = "value",
+  n_cores = future::availableCores() - 1
+)
 }
 \arguments{
 \item{forest}{A random forest object.}
 
 \item{new_data}{A data frame containing the new data to be predicted.}
 
-\item{n_cores}{The number of cores to use for parallel processing. Default is the number of available cores minus one.}
+\item{type}{The type of classification prediction to make. Default is "value".}
+
+\item{n_cores}{The number of cores to use for parallel processing.
+Default is the number of available cores minus one.}
 }
 \value{
 A vector of predictions.
