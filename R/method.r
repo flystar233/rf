@@ -11,16 +11,18 @@ find_best_split_classification <- function(data, features, target, min_samples_l
   best_split <- NULL
 
   for (feature in features) {
-    if (is.numeric(data[[feature]])) {
-      split_points <- if (length(unique(data[[feature]])) <= 100) {
-        sort(unique(data[[feature]]))
+    feature_data <- data[[feature]]
+    target_data <- data[[target]]
+    if (is.numeric(feature_data)) {
+      split_points <- if (length(unique(feature_data)) <= 100) {
+        sort(unique(feature_data))
       } else {
-        quantile(data[[feature]], probs = seq(0, 1, length.out = 100))
+        quantile(feature_data, probs = seq(0, 1, length.out = 100))
       }
 
       for (split in split_points) {
-        left <- data[[target]][data[[feature]] <= split]
-        right <- data[[target]][data[[feature]] > split]
+        left <- target_data[feature_data <= split]
+        right <- target_data[feature_data > split]
 
         # 检查分割后的子节点是否满足最小样本数要求
         if (length(left) < min_samples_leaf || length(right) < min_samples_leaf) {
@@ -36,10 +38,10 @@ find_best_split_classification <- function(data, features, target, min_samples_l
       }
     } else {
       # 对分类变量，考虑所有可能的二分法
-      levels <- unique(data[[feature]])
+      levels <- unique(feature_data)
       for (level in levels) {
-        left <- data[[target]][data[[feature]] == level]
-        right <- data[[target]][data[[feature]] != level]
+        left <- target_data[feature_data == level]
+        right <- target_data[feature_data != level]
 
         # 检查分割后的子节点是否满足最小样本数要求
         if (length(left) < min_samples_leaf || length(right) < min_samples_leaf) {
@@ -71,16 +73,18 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
   best_split <- NULL
 
   for (feature in features) {
-    if (is.numeric(data[[feature]])) {
-      split_points <- if (length(unique(data[[feature]])) <= 100) {
-        sort(unique(data[[feature]]))
+    feature_data <- data[[feature]]
+    target_data <- data[[target]]
+    if (is.numeric(feature_data)) {
+      split_points <- if (length(unique(feature_data)) <= 100) {
+        sort(unique(feature_data))
       } else {
-        quantile(data[[feature]], probs = seq(0, 1, length.out = 100))
+        quantile(feature_data, probs = seq(0, 1, length.out = 100))
       }
 
       for (split in split_points) {
-        left <- data[[target]][data[[feature]] <= split]
-        right <- data[[target]][data[[feature]] > split]
+        left <- target_data[feature_data <= split]
+        right <- target_data[feature_data > split]
         # 检查分割后的子节点是否满足最小样本数要求
         if (length(left) < min_samples_leaf || length(right) < min_samples_leaf) {
           next
@@ -99,10 +103,10 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
         }
       }
     } else {
-      levels <- unique(data[[feature]])
+      levels <- unique(feature_data)
       for (level in levels) {
-        left <- data[[target]][data[[feature]] == level]
-        right <- data[[target]][data[[feature]] != level]
+        left <- target_data[feature_data == level]
+        right <- target_data[feature_data != level]
 
         # 检查分割后的子节点是否满足最小样本数要求
         if (length(left) < min_samples_leaf || length(right) < min_samples_leaf) {
