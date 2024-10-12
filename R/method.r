@@ -94,8 +94,7 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
         left_mse <- if (length(left) > 0) mean((left - mean(left))^2) else 0
         right_mse <- if (length(right) > 0) mean((right - mean(right))^2)
         mse_sum <- left_mse * length(left) + right_mse * length(right)
-        total_length <- length(left) + length(right)
-        mse <- mse_sum / total_length
+        mse <- mse_sum / length(target_data)
 
         if (mse < best_mse) {
           best_mse <- mse
@@ -116,8 +115,7 @@ find_best_split_regression <- function(data, features, target, min_samples_leaf)
         left_mse <- if (length(left) > 0) mean((left - mean(left))^2) else 0
         right_mse <- if (length(right) > 0) mean((right - mean(right))^2)
         mse_sum <- left_mse * length(left) + right_mse * length(right)
-        total_length <- length(left) + length(right)
-        mse <- mse_sum / total_length
+        mse <- mse_sum / length(target_data)
 
         if (mse < best_mse) {
           best_mse <- mse
