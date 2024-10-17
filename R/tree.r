@@ -37,12 +37,13 @@ build_decision_tree <- function(X, y, max_depth = Inf, min_samples_split = 2, mi
     }
 
     # 分割数据
+    best_split_feature_data <- data[[best_split$feature]]
     if (is.numeric(best_split$value)) {
-      left_data <- data[data[[best_split$feature]] <= best_split$value, ]
-      right_data <- data[data[[best_split$feature]] > best_split$value, ]
+      left_data <- data[best_split_feature_data <= best_split$value, ]
+      right_data <- data[best_split_feature_data > best_split$value, ]
     } else {
-      left_data <- data[data[[best_split$feature]] == best_split$value, ]
-      right_data <- data[data[[best_split$feature]] != best_split$value, ]
+      left_data <- data[best_split_feature_data == best_split$value, ]
+      right_data <- data[best_split_feature_data != best_split$value, ]
     }
     # 递归构建左右子树
     left_branch <- build_tree_recursive(left_data, depth + 1)
