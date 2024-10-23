@@ -70,7 +70,7 @@ y = train_data[, 5], n_trees = 100, max_depth = 5,
 min_samples_split = 2, min_samples_leaf = 1, mtry = 2,
 subsample = 0.632, replace = TRUE, seed = 123, type = "classification", n_cores = 1)
 # Make predictions on the test data
-predictions <- predict_random_forest(rf_model, test_data[, -5])
+predictions <- predict(rf_model, test_data[, -5])
 # Evaluate the accuracy of the model
 accuracy <- sum(predictions == test_data[, 5]) / nrow(test_data)
 print(accuracy)

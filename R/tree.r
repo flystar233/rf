@@ -50,7 +50,7 @@ build_decision_tree <- function(X, y, max_depth = Inf, min_samples_split = 2, mi
     right_branch <- build_tree_recursive(right_data, depth + 1)
 
     # 返回节点信息
-    return(list(
+    return_result <- list(
       type = "node",
       feature = best_split$feature,
       value = best_split$value,
@@ -58,7 +58,9 @@ build_decision_tree <- function(X, y, max_depth = Inf, min_samples_split = 2, mi
       samples = nrow(data),
       left = left_branch,
       right = right_branch
-    ))
+    )
+    class(return_result) <- c("decision_tree")
+    return(return_result)
   }
 
   return(build_tree_recursive(data))
