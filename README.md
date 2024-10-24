@@ -35,8 +35,8 @@ forest <- random_forest(data[1:13],data[14],
                         min_samples_leaf = 2,replace = T,type = "classification")
 print(forest$oob_error)
 #0.02247191
-prediction = predict_random_forest(forest,data[10:20,1:13],type='value') #计算预测类类型
-prediction = predict_random_forest(forest,data[10:20,1:13],type='prob') #计算预测类型概率
+prediction = predict(forest,data[10:20,1:13],type='value') #计算预测类类型
+prediction = predict(forest,data[10:20,1:13],type='prob') #计算预测类型概率
 acc = calculate_accuracy(forest,data[1:13],data[14])
 print(acc)
 #1
